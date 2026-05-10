@@ -487,6 +487,148 @@
   }
   .repo-link:hover { color: var(--accent); }
 
+  /* ── Settings button ── */
+  .btn-settings {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-settings:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+    background: var(--surface-hover);
+  }
+  .btn-settings.token-set { border-color: rgba(16,217,138,0.3); color: #10d98a; }
+  .btn-settings.token-set:hover { background: rgba(16,217,138,0.08); }
+
+  /* ── Token modal ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: #0e1220;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    width: 100%;
+    max-width: 420px;
+    margin: 16px;
+    transform: translateY(12px) scale(0.98);
+    transition: transform 0.2s;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .modal-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .modal-desc a { color: var(--accent); text-decoration: none; }
+  .modal-desc a:hover { text-decoration: underline; }
+
+  .modal-input-wrap { position: relative; margin-bottom: 16px; }
+  .modal-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    padding: 11px 44px 11px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--accent); }
+  .modal-input::placeholder { color: var(--text-muted); }
+
+  .modal-eye {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 15px;
+    line-height: 1;
+  }
+  .modal-eye:hover { color: var(--text-secondary); }
+
+  .modal-status {
+    font-size: 11px;
+    margin-bottom: 16px;
+    min-height: 16px;
+  }
+  .modal-status.ok { color: #10d98a; }
+  .modal-status.err { color: #ff6b6b; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .modal-cancel {
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .modal-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+
+  .modal-save {
+    padding: 9px 22px;
+    border-radius: 8px;
+    border: 1px solid rgba(79,156,249,0.4);
+    background: rgba(79,156,249,0.15);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .modal-save:hover { background: rgba(79,156,249,0.25); box-shadow: 0 0 16px rgba(79,156,249,0.2); }
+
   /* ── Footer ── */
   .footer {
     margin-top: 48px;
@@ -541,9 +683,15 @@
         <h1>BITTIMES Master Room</h1>
         <p class="tagline">全部署の稼働状況をリアルタイムで監視</p>
       </div>
-      <div class="header-meta">
-        <div>監査レポート <span class="audit-chip">2026-W19</span></div>
-        <div>更新: 2026-05-10 23:02 JST</div>
+      <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div class="header-meta">
+          <div>監査レポート <span class="audit-chip">2026-W19</span></div>
+          <div>更新: 2026-05-10 23:19 JST</div>
+        </div>
+        <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+          Token
+        </button>
       </div>
     </div>
     <div class="stats-bar">
@@ -739,6 +887,23 @@
   </footer>
 
 </div>
+
+<div class="modal-overlay" id="token-modal">
+  <div class="modal">
+    <div class="modal-title">GitHub Token 設定</div>
+    <p class="modal-desc">承認・却下の操作に GitHub Personal Access Token が必要です。<br>    <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a> で発行（<code>repo</code> スコープ）。一度設定するとこのブラウザに記憶されます。</p>
+    <div class="modal-input-wrap">
+      <input class="modal-input" id="token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+      <button class="modal-eye" id="token-eye" onclick="toggleTokenVisibility()" type="button">👁</button>
+    </div>
+    <div class="modal-status" id="token-status"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeTokenModal()">キャンセル</button>
+      <button class="modal-save" onclick="saveTokenAndClose()">保存</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
 var QUEUE = [{"id": "sample-2026-W19-001", "dept": "seo", "priority": "high", "title": "MetaMask記事（115969）クラスター内リンク最終確認・公開承認", "detail": "MetaMask記事のリライトが完了しました。クラスター内の全9記事との双方向リンクを確認済みです。WPへの更新・Notionカード登録まで完了しています。Google Search Consoleでインデックス登録リクエストを送る前に承認をお願いします。", "created_at": "2026-05-10", "action": {"type": "none"}}];
@@ -750,16 +915,76 @@ var DEPT_COLORS = {
   feature: '#34d399', marketing: '#f472b6', sns: '#fb923c', audit: '#94a3b8'
 };
 
-function getToken() { return localStorage.getItem('bittimes_gh_token'); }
-function setToken(t) { localStorage.setItem('bittimes_gh_token', t); }
+var TOKEN_KEY = 'bittimes_gh_token';
 
-function ensureToken() {
-  var t = getToken();
-  if (!t) {
-    t = prompt('GitHub Personal Access Token を入力してください\n（repo スコープが必要です）');
-    if (t) setToken(t);
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+function saveToken(t) {
+  if (t) localStorage.setItem(TOKEN_KEY, t.trim());
+  else localStorage.removeItem(TOKEN_KEY);
+  updateSettingsBtn();
+}
+
+function updateSettingsBtn() {
+  var btn = document.getElementById('btn-settings');
+  if (!btn) return;
+  if (getToken()) {
+    btn.classList.add('token-set');
+    btn.title = 'Token 設定済み（クリックで変更）';
+  } else {
+    btn.classList.remove('token-set');
+    btn.title = 'GitHub Token を設定';
   }
-  return t;
+}
+
+function openTokenModal(afterSave) {
+  var overlay = document.getElementById('token-modal');
+  var input = document.getElementById('token-input');
+  var status = document.getElementById('token-status');
+  input.value = getToken();
+  input.type = 'password';
+  document.getElementById('token-eye').textContent = '👁';
+  status.textContent = '';
+  status.className = 'modal-status';
+  overlay.classList.add('open');
+  overlay._afterSave = afterSave || null;
+  setTimeout(function() { input.focus(); input.select(); }, 100);
+}
+
+function closeTokenModal() {
+  var overlay = document.getElementById('token-modal');
+  overlay.classList.remove('open');
+  overlay._afterSave = null;
+}
+
+function toggleTokenVisibility() {
+  var input = document.getElementById('token-input');
+  var eye = document.getElementById('token-eye');
+  if (input.type === 'password') { input.type = 'text'; eye.textContent = '🙈'; }
+  else { input.type = 'password'; eye.textContent = '👁'; }
+}
+
+async function saveTokenAndClose() {
+  var input = document.getElementById('token-input');
+  var status = document.getElementById('token-status');
+  var t = input.value.trim();
+  if (!t) { saveToken(''); closeTokenModal(); return; }
+  status.textContent = '確認中...';
+  status.className = 'modal-status';
+  try {
+    var res = await fetch('https://api.github.com/user', {
+      headers: { 'Authorization': 'Bearer ' + t, 'Accept': 'application/vnd.github+json' }
+    });
+    if (!res.ok) throw new Error('無効なトークンです（' + res.status + '）');
+    var user = await res.json();
+    status.textContent = '✅ ' + user.login + ' として認証されました';
+    status.className = 'modal-status ok';
+    saveToken(t);
+    var after = document.getElementById('token-modal')._afterSave;
+    setTimeout(function() { closeTokenModal(); if (after) after(); }, 700);
+  } catch (e) {
+    status.textContent = '❌ ' + e.message;
+    status.className = 'modal-status err';
+  }
 }
 
 function toast(msg, isError) {
@@ -790,9 +1015,9 @@ function toggleItem(idx) {
 }
 
 async function approveItem(idx) {
+  var token = getToken();
+  if (!token) { openTokenModal(function() { approveItem(idx); }); return; }
   var item = QUEUE[idx];
-  var token = ensureToken();
-  if (!token) return;
   var btn = document.getElementById('qi-approve-' + idx);
   btn.textContent = '実行中...';
   btn.disabled = true;
@@ -829,10 +1054,10 @@ async function approveItem(idx) {
 }
 
 async function rejectItem(idx) {
+  var token = getToken();
+  if (!token) { openTokenModal(function() { rejectItem(idx); }); return; }
   var item = QUEUE[idx];
   if (!confirm('「' + item.title + '」を却下しますか？')) return;
-  var token = ensureToken();
-  if (!token) return;
   try {
     await removeFromQueue(idx, token, '却下');
     toast('却下しました: ' + item.title);
@@ -907,7 +1132,23 @@ function renderQueue() {
   }).join('');
 }
 
-document.addEventListener('DOMContentLoaded', renderQueue);
+document.addEventListener('DOMContentLoaded', function() {
+  renderQueue();
+  updateSettingsBtn();
+  var input = document.getElementById('token-input');
+  if (input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') saveTokenAndClose();
+      if (e.key === 'Escape') closeTokenModal();
+    });
+  }
+  var overlay = document.getElementById('token-modal');
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeTokenModal();
+    });
+  }
+});
 
 </script>
 </body>
