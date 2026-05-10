@@ -3,96 +3,912 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BITTIMES マスタールーム</title>
+<title>BITTIMES Master Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0f0f0f; color: #e0e0e0; margin: 0; padding: 24px; }
-  h1 { color: #f5a623; margin-bottom: 4px; }
-  .subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 20px; }
-  .card h2 { font-size: 16px; margin: 0 0 8px; color: #fff; }
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: bold; }
-  .phase1 { background: #1e3a5f; color: #5b9bd5; }
-  .phase2 { background: #1e4a2a; color: #5baa6f; }
-  .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .score-detail { font-size: 12px; color: #888; }
-  .repo { font-size: 12px; color: #555; word-break: break-all; margin: 0; }
-  .footer { margin-top: 32px; color: #444; font-size: 12px; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #060810;
+    --surface: rgba(255,255,255,0.035);
+    --surface-hover: rgba(255,255,255,0.065);
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.16);
+    --text-primary: #eef0f8;
+    --text-secondary: #8892a4;
+    --text-muted: #3d4a5c;
+    --accent: #4f9cf9;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% -10%, rgba(79,156,249,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 110%, rgba(16,217,138,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 44px 28px 60px;
+  }
+
+  /* ── Queue section ── */
+  #queue-section {
+    margin-bottom: 28px;
+    background: rgba(245,158,11,0.05);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .queue-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 20px;
+    border-bottom: 1px solid rgba(245,158,11,0.12);
+    user-select: none;
+  }
+
+  .queue-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  #queue-badge {
+    background: #f59e0b;
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 20px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .queue-item {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .queue-item:last-child { border-bottom: none; }
+
+  .qi-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .qi-header:hover { background: rgba(255,255,255,0.025); }
+
+  .qi-dept {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  .qi-title-text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .qi-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .qi-arrow {
+    color: var(--text-muted);
+    font-size: 14px;
+    width: 14px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .qi-body {
+    padding: 16px 20px 18px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    background: rgba(0,0,0,0.15);
+  }
+
+  .qi-detail {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .qi-action-info {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 6px 12px;
+    margin-bottom: 14px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .qi-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .btn-reject {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-reject:hover {
+    background: rgba(255,107,107,0.1);
+    border-color: rgba(255,107,107,0.3);
+    color: #ff6b6b;
+  }
+
+  .btn-approve {
+    padding: 8px 22px;
+    border-radius: 8px;
+    border: 1px solid rgba(16,217,138,0.3);
+    background: rgba(16,217,138,0.1);
+    color: #10d98a;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-approve:hover {
+    background: rgba(16,217,138,0.2);
+    border-color: rgba(16,217,138,0.5);
+    box-shadow: 0 0 16px rgba(16,217,138,0.15);
+  }
+  .btn-approve:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: rgba(18,22,34,0.96);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 13px 22px;
+    border-radius: 10px;
+    backdrop-filter: blur(16px);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: 360px;
+  }
+  .toast.in { opacity: 1; transform: translateY(0); }
+  .toast.error { border-color: rgba(255,107,107,0.35); color: #ff9a9a; }
+
+  /* ── Header ── */
+  .header { margin-bottom: 40px; }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .logo h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    background: linear-gradient(135deg, #eef0f8 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+
+  .logo .tagline {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+
+  .audit-chip {
+    display: inline-block;
+    background: rgba(79,156,249,0.12);
+    color: var(--accent);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    border: 1px solid rgba(79,156,249,0.2);
+  }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-width: 120px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+
+  .stat-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* ── Divider ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    margin: 32px 0;
+  }
+
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.5);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .dept-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dept-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  .dept-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .dept-id {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+
+  .badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .badge.phase2 {
+    background: rgba(16,217,138,0.1);
+    color: #10d98a;
+    border: 1px solid rgba(16,217,138,0.22);
+  }
+  .badge.phase1 {
+    background: rgba(79,156,249,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,156,249,0.22);
+  }
+
+  /* ── Score ring ── */
+  .score-section {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+
+  .score-ring {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 4; }
+  .ring-fill { fill: none; stroke-width: 4; stroke-linecap: round; }
+
+  .ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .ring-text .grade { font-size: 21px; font-weight: 800; letter-spacing: -1px; }
+  .ring-text .points { font-size: 9px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+
+  .score-ring.no-data {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 18px;
+  }
+
+  .indicators { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+
+  .indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  .ind-label {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ind-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-ok   { background: #10d98a; box-shadow: 0 0 6px rgba(16,217,138,0.5); }
+  .dot-warn { background: #f5a623; box-shadow: 0 0 6px rgba(245,166,35,0.5); }
+  .dot-crit { background: #ff6b6b; box-shadow: 0 0 6px rgba(255,107,107,0.5); }
+
+  .ind-value { font-weight: 600; font-size: 12px; }
+
+  .card-footer {
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .repo-link {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .repo-link:hover { color: var(--accent); }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .footer a:hover { text-decoration: underline; }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: #10d98a;
+    font-weight: 500;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    background: #10d98a;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(16,217,138,0.4); }
+    50% { opacity: 0.8; transform: scale(1.15); box-shadow: 0 0 0 5px rgba(16,217,138,0); }
+  }
+
 </style>
 </head>
 <body>
-<h1>🏢 BITTIMES マスタールーム</h1>
-<p class="subtitle">全部署の稼働状況 — 監査: <a href="../audit/findings/2026-W19.md" style="color:#666">2026-W19</a> — 生成: 2026-05-10 22:40 JST</p>
+<div class="container">
 
-<div class="grid">
-
-  <div class="card">
-    <div class="status-row">
-      <h2>📰 ニュース部署</h2>
-      <span class="badge phase2">phase2-active</span>
+  <div id="queue-section" style="display:none">
+    <div class="queue-header">
+      <span class="queue-title">承認待ち</span>
+      <span id="queue-badge">0</span>
     </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-News</p>
+    <div id="queue-items"></div>
   </div>
 
-  <div class="card">
-    <div class="status-row">
-      <h2>🔍 SEO部署</h2>
-      <span class="badge phase2">phase2-active</span>
+  <header class="header">
+    <div class="header-top">
+      <div class="logo">
+        <h1>BITTIMES Master Room</h1>
+        <p class="tagline">全部署の稼働状況をリアルタイムで監視</p>
+      </div>
+      <div class="header-meta">
+        <div>監査レポート <span class="audit-chip">2026-W19</span></div>
+        <div>更新: 2026-05-10 23:02 JST</div>
+      </div>
     </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-SEO</p>
+    <div class="stats-bar">
+      <div class="stat-chip"><div>
+        <div class="stat-label">平均スコア</div>
+        <div class="stat-value" style="color:#10d98a">100</div>
+        <div class="stat-sub">Grade A</div>
+      </div></div>
+      <div class="stat-chip"><div>
+        <div class="stat-label">稼働中</div>
+        <div class="stat-value" style="color:#4f9cf9">6</div>
+        <div class="stat-sub">/ 7 部署</div>
+      </div></div>
+      <div class="stat-chip"><div>
+        <div class="stat-label">Critical</div>
+        <div class="stat-value" style="color:#10d98a">0</div>
+        <div class="stat-sub">件</div>
+      </div></div>
+      <div class="stat-chip"><div>
+        <div class="stat-label">Warning</div>
+        <div class="stat-value" style="color:#10d98a">0</div>
+        <div class="stat-sub">件</div>
+      </div></div>
+    </div>
+  </header>
+
+  <div class="section-divider"></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">📰</div>
+          <div>
+            <div class="dept-name">ニュース部署</div>
+            <div class="dept-id">news</div>
+          </div>
+        </div>
+        <span class="badge phase2">ACTIVE</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-News" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-News
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">🔍</div>
+          <div>
+            <div class="dept-name">SEO部署</div>
+            <div class="dept-id">seo</div>
+          </div>
+        </div>
+        <span class="badge phase2">ACTIVE</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SEO" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-SEO
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">🎯</div>
+          <div>
+            <div class="dept-name">キャンペーン記事部署</div>
+            <div class="dept-id">campaign</div>
+          </div>
+        </div>
+        <span class="badge phase2">ACTIVE</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Campaign" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-Campaign
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">📝</div>
+          <div>
+            <div class="dept-name">特集記事部署</div>
+            <div class="dept-id">feature</div>
+          </div>
+        </div>
+        <span class="badge phase2">ACTIVE</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Feature" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-Feature
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">💰</div>
+          <div>
+            <div class="dept-name">マーケティング部署</div>
+            <div class="dept-id">marketing</div>
+          </div>
+        </div>
+        <span class="badge phase2">ACTIVE</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Marketing" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-Marketing
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">📱</div>
+          <div>
+            <div class="dept-name">SNS部署</div>
+            <div class="dept-id">sns</div>
+          </div>
+        </div>
+        <span class="badge phase2">ACTIVE</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SNS" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-SNS
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="dept-info">
+          <div class="dept-icon">🔎</div>
+          <div>
+            <div class="dept-name">監査部署</div>
+            <div class="dept-id">audit</div>
+          </div>
+        </div>
+        <span class="badge phase1">MIRROR</span>
+      </div>
+      <div class="score-section">
+        <div class="score-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="26"/><circle class="ring-fill" cx="32" cy="32" r="26" stroke="#10d98a" stroke-dasharray="163.36" stroke-dashoffset="0.00"/></svg><div class="ring-text"><span class="grade" style="color:#10d98a">A</span><span class="points">100</span></div></div>
+        <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
+      </div>
+      <div class="card-footer">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Audit" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          SIMPLIFY-CoLtd/BITTIMES-Audit
+        </a>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <div class="status-row">
-      <h2>🎯 キャンペーン記事部署</h2>
-      <span class="badge phase2">phase2-active</span>
+  <footer class="footer">
+    <div class="live-indicator"><span class="live-dot"></span>毎週月曜 JST 12:00 自動更新</div>
+    <div>
+      <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Master" target="_blank" rel="noopener">BITTIMES-Master</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Dashboard" target="_blank" rel="noopener">Dashboard Repo</a>
     </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-Campaign</p>
-  </div>
+  </footer>
 
-  <div class="card">
-    <div class="status-row">
-      <h2>📝 特集記事部署</h2>
-      <span class="badge phase2">phase2-active</span>
-    </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-Feature</p>
-  </div>
-
-  <div class="card">
-    <div class="status-row">
-      <h2>💰 マーケティング部署</h2>
-      <span class="badge phase2">phase2-active</span>
-    </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-Marketing</p>
-  </div>
-
-  <div class="card">
-    <div class="status-row">
-      <h2>📱 SNS部署</h2>
-      <span class="badge phase2">phase2-active</span>
-    </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-SNS</p>
-  </div>
-
-  <div class="card">
-    <div class="status-row">
-      <h2>🔎 監査部署</h2>
-      <span class="badge phase1">phase1-mirror</span>
-    </div>
-    <div class="score-row"><span style="color:#5baa6f;font-weight:bold;font-size:18px">A</span><span class="score-detail">100点 ✅ ✅</span></div>
-    <p class="repo">github.com/SIMPLIFY-CoLtd/BITTIMES-Audit</p>
-  </div>
 </div>
+<script>
 
-<div class="footer">
-  <p>BITTIMES-Master | <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Master" style="color:#666">GitHub</a></p>
-</div>
+var QUEUE = [{"id": "sample-2026-W19-001", "dept": "seo", "priority": "high", "title": "MetaMask記事（115969）クラスター内リンク最終確認・公開承認", "detail": "MetaMask記事のリライトが完了しました。クラスター内の全9記事との双方向リンクを確認済みです。WPへの更新・Notionカード登録まで完了しています。Google Search Consoleでインデックス登録リクエストを送る前に承認をお願いします。", "created_at": "2026-05-10", "action": {"type": "none"}}];
+var GH_ORG = "SIMPLIFY-CoLtd";
+var MASTER_REPO = "BITTIMES-Master";
+
+var DEPT_COLORS = {
+  news: '#4f9cf9', seo: '#a78bfa', campaign: '#f59e0b',
+  feature: '#34d399', marketing: '#f472b6', sns: '#fb923c', audit: '#94a3b8'
+};
+
+function getToken() { return localStorage.getItem('bittimes_gh_token'); }
+function setToken(t) { localStorage.setItem('bittimes_gh_token', t); }
+
+function ensureToken() {
+  var t = getToken();
+  if (!t) {
+    t = prompt('GitHub Personal Access Token を入力してください\n（repo スコープが必要です）');
+    if (t) setToken(t);
+  }
+  return t;
+}
+
+function toast(msg, isError) {
+  var el = document.createElement('div');
+  el.className = 'toast' + (isError ? ' error' : '');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { el.classList.add('in'); });
+  });
+  setTimeout(function() {
+    el.classList.remove('in');
+    setTimeout(function() { el.remove(); }, 300);
+  }, 3800);
+}
+
+function toggleItem(idx) {
+  var body = document.getElementById('qi-body-' + idx);
+  var arrow = document.getElementById('qi-arrow-' + idx);
+  if (!body) return;
+  var isOpen = body.style.display !== 'none';
+  document.querySelectorAll('.qi-body').forEach(function(el) { el.style.display = 'none'; });
+  document.querySelectorAll('.qi-arrow').forEach(function(el) { el.style.transform = ''; });
+  if (!isOpen) {
+    body.style.display = 'block';
+    if (arrow) arrow.style.transform = 'rotate(90deg)';
+  }
+}
+
+async function approveItem(idx) {
+  var item = QUEUE[idx];
+  var token = ensureToken();
+  if (!token) return;
+  var btn = document.getElementById('qi-approve-' + idx);
+  btn.textContent = '実行中...';
+  btn.disabled = true;
+  try {
+    if (item.action && item.action.type === 'workflow_dispatch') {
+      var res = await fetch(
+        'https://api.github.com/repos/' + GH_ORG + '/' + item.action.repo +
+        '/actions/workflows/' + item.action.workflow + '/dispatches',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ref: 'main', inputs: item.action.inputs || {} }),
+        }
+      );
+      if (res.status !== 204) {
+        var errText = await res.text();
+        throw new Error('GitHub API ' + res.status + ': ' + errText);
+      }
+    } else if (item.action && item.action.type === 'link') {
+      window.open(item.action.url, '_blank');
+    }
+    await removeFromQueue(idx, token, '承認');
+    toast('✅ 承認・実行しました: ' + item.title);
+  } catch (e) {
+    toast('❌ ' + e.message, true);
+    btn.textContent = '承認・実行';
+    btn.disabled = false;
+  }
+}
+
+async function rejectItem(idx) {
+  var item = QUEUE[idx];
+  if (!confirm('「' + item.title + '」を却下しますか？')) return;
+  var token = ensureToken();
+  if (!token) return;
+  try {
+    await removeFromQueue(idx, token, '却下');
+    toast('却下しました: ' + item.title);
+  } catch (e) {
+    toast('❌ ' + e.message, true);
+  }
+}
+
+async function removeFromQueue(idx, token, action) {
+  var item = QUEUE[idx];
+  QUEUE.splice(idx, 1);
+  var apiUrl = 'https://api.github.com/repos/' + GH_ORG + '/' + MASTER_REPO +
+               '/contents/queue/pending.json';
+  var headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  var getRes = await fetch(apiUrl, { headers: headers });
+  var fileData = await getRes.json();
+  var newJson = JSON.stringify(QUEUE, null, 2) + '\n';
+  var encoded = btoa(unescape(encodeURIComponent(newJson)));
+  await fetch(apiUrl, {
+    method: 'PUT',
+    headers: Object.assign({}, headers, { 'Content-Type': 'application/json' }),
+    body: JSON.stringify({
+      message: 'queue: ' + action + ' — ' + item.id,
+      content: encoded,
+      sha: fileData.sha,
+    }),
+  });
+  renderQueue();
+}
+
+function renderQueue() {
+  var container = document.getElementById('queue-items');
+  var section = document.getElementById('queue-section');
+  var badge = document.getElementById('queue-badge');
+  if (!container || !section || !badge) return;
+
+  badge.textContent = QUEUE.length;
+  section.style.display = QUEUE.length > 0 ? 'block' : 'none';
+
+  if (QUEUE.length === 0) { container.innerHTML = ''; return; }
+
+  container.innerHTML = QUEUE.map(function(item, idx) {
+    var c = DEPT_COLORS[item.dept] || '#8892a4';
+    var hasWorkflow = item.action && item.action.type === 'workflow_dispatch';
+    var hasLink = item.action && item.action.type === 'link';
+    var approveLabel = (hasWorkflow || hasLink) ? '承認・実行' : '承認';
+    var actionInfo = hasWorkflow
+      ? '<div class="qi-action-info">🔧 ' + item.action.repo + ' / ' + item.action.workflow + '</div>'
+      : hasLink
+      ? '<div class="qi-action-info">🔗 ' + item.action.url + '</div>'
+      : '';
+    return '<div class="queue-item" id="qi-' + idx + '">' +
+      '<div class="qi-header" onclick="toggleItem(' + idx + ')">' +
+        '<span class="qi-dept" style="background:' + c + '22;color:' + c + ';border:1px solid ' + c + '44">' + item.dept + '</span>' +
+        '<span class="qi-title-text">' + item.title + '</span>' +
+        '<span class="qi-date">' + item.created_at + '</span>' +
+        '<span class="qi-arrow" id="qi-arrow-' + idx + '" style="transition:transform 0.2s">›</span>' +
+      '</div>' +
+      '<div class="qi-body" id="qi-body-' + idx + '" style="display:none">' +
+        '<p class="qi-detail">' + (item.detail || '').replace(/\n/g, '<br>') + '</p>' +
+        actionInfo +
+        '<div class="qi-actions">' +
+          '<button class="btn-reject" onclick="rejectItem(' + idx + ')">却下</button>' +
+          '<button class="btn-approve" id="qi-approve-' + idx + '" onclick="approveItem(' + idx + ')">' + approveLabel + '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', renderQueue);
+
+</script>
 </body>
 </html>
