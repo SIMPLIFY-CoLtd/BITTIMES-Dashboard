@@ -669,7 +669,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 22px 24px;
+    padding: 24px 26px;
     margin-bottom: 28px;
   }
 
@@ -679,11 +679,11 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 
   .seo-panel-title {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: 0.2px;
@@ -694,18 +694,24 @@
     color: var(--text-muted);
   }
 
+  /* 4列固定カード行 */
   .seo-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    margin-bottom: 18px;
+  }
+
+  .seo-cards + .seo-cards { margin-top: 10px; }
+
+  @media (max-width: 860px) {
+    .seo-cards { grid-template-columns: repeat(2, 1fr); }
   }
 
   .seo-card {
     background: rgba(255,255,255,0.025);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 13px 16px;
+    padding: 14px 16px;
   }
 
   .seo-card .l {
@@ -715,11 +721,11 @@
     text-transform: uppercase;
     letter-spacing: 0.6px;
     white-space: nowrap;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
   }
 
   .seo-card .v {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.5px;
@@ -729,17 +735,21 @@
   .seo-card .s {
     font-size: 10px;
     color: var(--text-muted);
-    margin-top: 3px;
+    margin-top: 4px;
   }
 
-  .seo-lower {
+  /* 2列チャートエリア */
+  .seo-charts {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
   }
 
-  @media (max-width: 720px) {
-    .seo-lower { grid-template-columns: 1fr; }
+  @media (max-width: 600px) {
+    .seo-charts { grid-template-columns: 1fr; }
   }
 
   .seo-sub-head {
@@ -748,20 +758,20 @@
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .bar-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 7px;
-    font-size: 11px;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
   }
 
   .bar-label {
     color: var(--text-secondary);
-    width: 110px;
+    width: 130px;
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -770,8 +780,8 @@
 
   .bar-track {
     flex: 1;
-    height: 6px;
-    background: rgba(255,255,255,0.05);
+    height: 7px;
+    background: rgba(255,255,255,0.06);
     border-radius: 99px;
     overflow: hidden;
   }
@@ -780,65 +790,91 @@
     height: 100%;
     border-radius: 99px;
     background: linear-gradient(90deg, var(--accent), #a78bfa);
-    transition: width 0.4s ease;
   }
 
-  .bar-fill.green { background: linear-gradient(90deg, #10d98a, #34d399); }
+  .bar-fill.green  { background: linear-gradient(90deg, #10d98a, #34d399); }
   .bar-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-  .bar-fill.pink { background: linear-gradient(90deg, #f472b6, #fb923c); }
+  .bar-fill.pink   { background: linear-gradient(90deg, #f472b6, #fb923c); }
 
   .bar-pct {
     color: var(--text-muted);
-    width: 34px;
+    width: 36px;
     text-align: right;
     flex-shrink: 0;
-  }
-
-  .seo-actions { display: flex; flex-direction: column; gap: 7px; }
-
-  .seo-action-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-  }
-
-  .seo-action-label {
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .seo-action-val { font-weight: 600; font-size: 12px; }
-
-  .seo-alert-row {
     font-size: 11px;
+  }
+
+  /* アクションエリア */
+  .seo-actions-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .seo-action-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .seo-action-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+
+  .seo-chip-label {
+    font-size: 12px;
     color: var(--text-secondary);
-    padding: 6px 10px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 6px;
-    line-height: 1.5;
-    margin-top: 4px;
+  }
+
+  .seo-chip-val {
+    font-size: 13px;
+    font-weight: 700;
+    margin-left: 2px;
+  }
+
+  .seo-alert-chip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .seo-alert-msg {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex: 1;
   }
 
   .alert-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     font-size: 9px;
     font-weight: 700;
-    padding: 1px 7px;
+    padding: 2px 8px;
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-right: 5px;
-    vertical-align: middle;
+    flex-shrink: 0;
+    margin-top: 2px;
   }
-  .alert-badge.info { background: rgba(79,156,249,0.15); color: var(--accent); border: 1px solid rgba(79,156,249,0.25); }
-  .alert-badge.warning { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
-  .alert-badge.critical { background: rgba(255,107,107,0.12); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.25); }
+  .alert-badge.info     { background: rgba(79,156,249,0.15);  color: var(--accent); border: 1px solid rgba(79,156,249,0.25); }
+  .alert-badge.warning  { background: rgba(245,158,11,0.12);  color: #f59e0b;       border: 1px solid rgba(245,158,11,0.25); }
+  .alert-badge.critical { background: rgba(255,107,107,0.12); color: #ff6b6b;       border: 1px solid rgba(255,107,107,0.25); }
 
   .seo-footer-row {
-    margin-top: 16px;
+    margin-top: 18px;
     padding-top: 14px;
     border-top: 1px solid var(--border);
     font-size: 11px;
@@ -899,7 +935,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W20</span></div>
-          <div>更新: 2026-05-11 23:59 JST</div>
+          <div>更新: 2026-05-12 00:06 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -1097,16 +1133,10 @@
 
   <div id="tab-seo" style="display:none">
 <div class="seo-panel">
-  <div class="seo-panel-head">
-    <span class="seo-panel-title">🔍 SEO スナップショット</span>
-    <span class="seo-panel-meta">取得: 2026-05-11</span>
-  </div>
-  <div class="seo-cards"><div class="seo-card"><div class="l">Web検索クリック</div><div class="v" style="color:#4f9cf9">3,996</div><div class="s">28日間 GSC</div></div><div class="seo-card"><div class="l">表示回数</div><div class="v">390,498</div><div class="s">Web検索</div></div><div class="seo-card"><div class="l">平均掲載順位</div><div class="v" style="color:#a78bfa">23.6位</div><div class="s">CTR 1.02%</div></div><div class="seo-card"><div class="l">Discoverクリック</div><div class="v" style="color:#10d98a">7,248</div><div class="s">11URL / CTR 7.1%</div></div><div class="seo-card"><div class="l">GA4 セッション</div><div class="v">49,164</div><div class="s">ユーザー 37,958</div></div><div class="seo-card"><div class="l">エンゲージメント率</div><div class="v" style="color:#f59e0b">36.0%</div><div class="s">平均滞在 1分24秒</div></div><div class="seo-card"><div class="l">PV</div><div class="v">63,428</div><div class="s">28日間</div></div><div class="seo-card"><div class="l">PageRank</div><div class="v" style="color:#f472b6">4.05</div><div class="s">世界 646,555位</div>
-  <div class="seo-lower">
-    <div><div class="seo-sub-head">流入チャネル</div><div class="bar-row"><span class="bar-label">Direct</span><span class="bar-track"><span class="bar-fill green" style="width:43.6%"></span></span><span class="bar-pct">44%</span></div><div class="bar-row"><span class="bar-label">Organic Search</span><span class="bar-track"><span class="bar-fill" style="width:30.8%"></span></span><span class="bar-pct">31%</span></div><div class="bar-row"><span class="bar-label">Organic Social</span><span class="bar-track"><span class="bar-fill pink" style="width:23.2%"></span></span><span class="bar-pct">23%</span></div><div class="bar-row"><span class="bar-label">Referral</span><span class="bar-track"><span class="bar-fill orange" style="width:1.6%"></span></span><span class="bar-pct">2%</span></div><div class="bar-row"><span class="bar-label">Unassigned</span><span class="bar-track"><span class="bar-fill" style="width:0.8%"></span></span><span class="bar-pct">1%</span></div></div>
-    <div><div class="seo-sub-head">デバイス</div><div class="bar-row"><span class="bar-label">モバイル</span><span class="bar-track"><span class="bar-fill green" style="width:67.2%"></span></span><span class="bar-pct">67%</span></div><div class="bar-row"><span class="bar-label">デスクトップ</span><span class="bar-track"><span class="bar-fill" style="width:31.3%"></span></span><span class="bar-pct">31%</span></div><div class="bar-row"><span class="bar-label">タブレット</span><span class="bar-track"><span class="bar-fill orange" style="width:1.5%"></span></span><span class="bar-pct">1%</span></div></div>
-    <div><div class="seo-sub-head">改善アクション</div><div class="seo-actions"><div class="seo-action-row"><span class="seo-action-label"><span class="ind-dot dot-warn"></span>リライト候補</span><span class="seo-action-val"><span style="color:#f59e0b;font-weight:600">68件</span></span></div><div class="seo-action-row"><span class="seo-action-label"><span class="ind-dot dot-warn"></span>カニバリゼーション</span><span class="seo-action-val"><span style="color:#ff6b6b;font-weight:600">50件</span></span></div></div><div class="seo-alert-row"><span class="alert-badge info">info</span>PageRank 4（小数4.05）：暗号資産メディアとして良好な水準。世界順位 646555位。</div></div>
-  </div>
+  <div class="seo-panel-head"><span class="seo-panel-title">🔍 SEO スナップショット</span><span class="seo-panel-meta">取得: 2026-05-11</span></div>
+  <div class="seo-cards"><div class="seo-card"><div class="l">Web検索クリック</div><div class="v" style="color:#4f9cf9">3,996</div><div class="s">28日間 GSC</div></div><div class="seo-card"><div class="l">表示回数</div><div class="v" style="color:var(--text-primary)">390,498</div><div class="s">Web検索</div></div><div class="seo-card"><div class="l">平均掲載順位</div><div class="v" style="color:#a78bfa">23.6位</div><div class="s">CTR 1.02%</div></div><div class="seo-card"><div class="l">Discoverクリック</div><div class="v" style="color:#10d98a">7,248</div><div class="s">11URL · CTR 7.1%</div></div></div><div class="seo-cards"><div class="seo-card"><div class="l">GA4 セッション</div><div class="v" style="color:var(--text-primary)">49,164</div><div class="s">ユーザー 37,958</div></div><div class="seo-card"><div class="l">エンゲージメント率</div><div class="v" style="color:#f59e0b">36.0%</div><div class="s">平均滞在 1分24秒</div></div><div class="seo-card"><div class="l">PV</div><div class="v" style="color:var(--text-primary)">63,428</div><div class="s">28日間</div></div><div class="seo-card"><div class="l">PageRank</div><div class="v" style="color:#f472b6">4.05</div><div class="s">世界 646,555位</div></div></div>
+  <div class="seo-charts"><div><div class="seo-sub-head">流入チャネル</div><div class="bar-row"><span class="bar-label">Direct</span><span class="bar-track"><span class="bar-fill green" style="width:43.6%"></span></span><span class="bar-pct">44%</span></div><div class="bar-row"><span class="bar-label">Organic Search</span><span class="bar-track"><span class="bar-fill" style="width:30.8%"></span></span><span class="bar-pct">31%</span></div><div class="bar-row"><span class="bar-label">Organic Social</span><span class="bar-track"><span class="bar-fill pink" style="width:23.2%"></span></span><span class="bar-pct">23%</span></div><div class="bar-row"><span class="bar-label">Referral</span><span class="bar-track"><span class="bar-fill orange" style="width:1.6%"></span></span><span class="bar-pct">2%</span></div><div class="bar-row"><span class="bar-label">Unassigned</span><span class="bar-track"><span class="bar-fill" style="width:0.8%"></span></span><span class="bar-pct">1%</span></div></div><div><div class="seo-sub-head">デバイス</div><div class="bar-row"><span class="bar-label">モバイル</span><span class="bar-track"><span class="bar-fill green" style="width:67.2%"></span></span><span class="bar-pct">67%</span></div><div class="bar-row"><span class="bar-label">デスクトップ</span><span class="bar-track"><span class="bar-fill" style="width:31.3%"></span></span><span class="bar-pct">31%</span></div><div class="bar-row"><span class="bar-label">タブレット</span><span class="bar-track"><span class="bar-fill orange" style="width:1.5%"></span></span><span class="bar-pct">1%</span></div></div></div>
+  <div class="seo-actions-section"><div class="seo-sub-head">改善アクション</div><div class="seo-action-chips"><div class="seo-action-chip"><span class="ind-dot dot-warn"></span><span class="seo-chip-label">リライト候補</span><span class="seo-chip-val" style="color:#f59e0b">68件</span></div><div class="seo-action-chip"><span class="ind-dot dot-crit"></span><span class="seo-chip-label">カニバリゼーション</span><span class="seo-chip-val" style="color:#ff6b6b">50件</span></div></div><div class="seo-alert-chip"><span class="alert-badge info">info</span><span class="seo-alert-msg">PageRank 4（小数4.05）：暗号資産メディアとして良好な水準。世界順位 646555位。</span></div></div>
   <div class="seo-footer-row"><span>Discover依存度 <strong>64%</strong> &nbsp;·&nbsp; 1記事依存度 <strong>33%</strong> &nbsp;·&nbsp; PageRank <strong>4.05</strong></span><span>データ: 2026-04-10〜2026-05-08 &nbsp;|&nbsp; <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SEO" target="_blank" rel="noopener">BITTIMES-SEO</a></span></div>
 </div>
   </div>
