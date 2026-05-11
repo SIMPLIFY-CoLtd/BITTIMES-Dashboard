@@ -512,7 +512,7 @@
   .btn-settings.token-set { border-color: rgba(16,217,138,0.3); color: #10d98a; }
   .btn-settings.token-set:hover { background: rgba(16,217,138,0.08); }
 
-  /* ── Token modal ── */
+  /* ── Modal overlay (shared) ── */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -528,6 +528,7 @@
   }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
 
+  /* ── Token modal ── */
   .modal {
     background: #0e1220;
     border: 1px solid rgba(255,255,255,0.1);
@@ -712,6 +713,14 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 14px 16px;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+  .seo-card:hover {
+    background: rgba(255,255,255,0.055);
+    border-color: rgba(255,255,255,0.16);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
   }
 
   .seo-card .l {
@@ -722,7 +731,18 @@
     letter-spacing: 0.6px;
     white-space: nowrap;
     margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
+  .seo-card .l::after {
+    content: '↗';
+    font-size: 9px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-left: auto;
+  }
+  .seo-card:hover .l::after { opacity: 0.45; }
 
   .seo-card .v {
     font-size: 22px;
@@ -913,6 +933,83 @@
   .tab-btn:hover { color: var(--text-primary); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
+  /* ── Chart modal ── */
+  .chart-modal-inner {
+    background: #0e1220;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px 28px 20px;
+    width: 100%;
+    max-width: 660px;
+    margin: 16px;
+    transform: translateY(12px) scale(0.98);
+    transition: transform 0.2s;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+  .modal-overlay.open .chart-modal-inner { transform: translateY(0) scale(1); }
+
+  .chart-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .chart-modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .chart-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: inherit;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+  .chart-close:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+
+  .chart-period-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  .chart-period-btn {
+    padding: 5px 14px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .chart-period-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
+  .chart-period-btn.active {
+    border-color: rgba(79,156,249,0.4);
+    background: rgba(79,156,249,0.12);
+    color: var(--accent);
+  }
+
+  #chart-svg-container { width: 100%; }
+  #chart-svg-container svg { display: block; width: 100%; height: auto; }
+
+  .chart-modal-note {
+    margin-top: 10px;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
 </style>
 </head>
 <body>
@@ -935,7 +1032,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W20</span></div>
-          <div>更新: 2026-05-12 00:06 JST</div>
+          <div>更新: 2026-05-12 00:29 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -1134,7 +1231,7 @@
   <div id="tab-seo" style="display:none">
 <div class="seo-panel">
   <div class="seo-panel-head"><span class="seo-panel-title">🔍 SEO スナップショット</span><span class="seo-panel-meta">取得: 2026-05-11</span></div>
-  <div class="seo-cards"><div class="seo-card"><div class="l">Web検索クリック</div><div class="v" style="color:#4f9cf9">3,996</div><div class="s">28日間 GSC</div></div><div class="seo-card"><div class="l">表示回数</div><div class="v" style="color:var(--text-primary)">390,498</div><div class="s">Web検索</div></div><div class="seo-card"><div class="l">平均掲載順位</div><div class="v" style="color:#a78bfa">23.6位</div><div class="s">CTR 1.02%</div></div><div class="seo-card"><div class="l">Discoverクリック</div><div class="v" style="color:#10d98a">7,248</div><div class="s">11URL · CTR 7.1%</div></div></div><div class="seo-cards"><div class="seo-card"><div class="l">GA4 セッション</div><div class="v" style="color:var(--text-primary)">49,164</div><div class="s">ユーザー 37,958</div></div><div class="seo-card"><div class="l">エンゲージメント率</div><div class="v" style="color:#f59e0b">36.0%</div><div class="s">平均滞在 1分24秒</div></div><div class="seo-card"><div class="l">PV</div><div class="v" style="color:var(--text-primary)">63,428</div><div class="s">28日間</div></div><div class="seo-card"><div class="l">PageRank</div><div class="v" style="color:#f472b6">4.05</div><div class="s">世界 646,555位</div></div></div>
+  <div class="seo-cards"><div class="seo-card" onclick="openChart('web_clicks', 'Web検索クリック', '#4f9cf9')"><div class="l">Web検索クリック</div><div class="v" style="color:#4f9cf9">3,996</div><div class="s">28日間 GSC</div></div><div class="seo-card" onclick="openChart('web_impr', '表示回数', '#94a3b8')"><div class="l">表示回数</div><div class="v" style="color:#94a3b8">390,498</div><div class="s">Web検索</div></div><div class="seo-card" onclick="openChart('avg_position', '平均掲載順位', '#a78bfa')"><div class="l">平均掲載順位</div><div class="v" style="color:#a78bfa">23.6位</div><div class="s">CTR 1.02%</div></div><div class="seo-card" onclick="openChart('disc_clicks', 'Discoverクリック', '#10d98a')"><div class="l">Discoverクリック</div><div class="v" style="color:#10d98a">7,248</div><div class="s">11URL · CTR 7.1%</div></div></div><div class="seo-cards"><div class="seo-card" onclick="openChart('sessions', 'GA4 セッション', '#4f9cf9')"><div class="l">GA4 セッション</div><div class="v" style="color:#4f9cf9">49,164</div><div class="s">ユーザー 37,958</div></div><div class="seo-card" onclick="openChart('eng_rate', 'エンゲージメント率', '#f59e0b')"><div class="l">エンゲージメント率</div><div class="v" style="color:#f59e0b">36.0%</div><div class="s">平均滞在 1分24秒</div></div><div class="seo-card" onclick="openChart('page_views', 'PV', '#94a3b8')"><div class="l">PV</div><div class="v" style="color:#94a3b8">63,428</div><div class="s">28日間</div></div><div class="seo-card" onclick="openChart('pagerank', 'PageRank', '#f472b6')"><div class="l">PageRank</div><div class="v" style="color:#f472b6">4.05</div><div class="s">世界 646,555位</div></div></div>
   <div class="seo-charts"><div><div class="seo-sub-head">流入チャネル</div><div class="bar-row"><span class="bar-label">Direct</span><span class="bar-track"><span class="bar-fill green" style="width:43.6%"></span></span><span class="bar-pct">44%</span></div><div class="bar-row"><span class="bar-label">Organic Search</span><span class="bar-track"><span class="bar-fill" style="width:30.8%"></span></span><span class="bar-pct">31%</span></div><div class="bar-row"><span class="bar-label">Organic Social</span><span class="bar-track"><span class="bar-fill pink" style="width:23.2%"></span></span><span class="bar-pct">23%</span></div><div class="bar-row"><span class="bar-label">Referral</span><span class="bar-track"><span class="bar-fill orange" style="width:1.6%"></span></span><span class="bar-pct">2%</span></div><div class="bar-row"><span class="bar-label">Unassigned</span><span class="bar-track"><span class="bar-fill" style="width:0.8%"></span></span><span class="bar-pct">1%</span></div></div><div><div class="seo-sub-head">デバイス</div><div class="bar-row"><span class="bar-label">モバイル</span><span class="bar-track"><span class="bar-fill green" style="width:67.2%"></span></span><span class="bar-pct">67%</span></div><div class="bar-row"><span class="bar-label">デスクトップ</span><span class="bar-track"><span class="bar-fill" style="width:31.3%"></span></span><span class="bar-pct">31%</span></div><div class="bar-row"><span class="bar-label">タブレット</span><span class="bar-track"><span class="bar-fill orange" style="width:1.5%"></span></span><span class="bar-pct">1%</span></div></div></div>
   <div class="seo-actions-section"><div class="seo-sub-head">改善アクション</div><div class="seo-action-chips"><div class="seo-action-chip"><span class="ind-dot dot-warn"></span><span class="seo-chip-label">リライト候補</span><span class="seo-chip-val" style="color:#f59e0b">68件</span></div><div class="seo-action-chip"><span class="ind-dot dot-crit"></span><span class="seo-chip-label">カニバリゼーション</span><span class="seo-chip-val" style="color:#ff6b6b">50件</span></div></div><div class="seo-alert-chip"><span class="alert-badge info">info</span><span class="seo-alert-msg">PageRank 4（小数4.05）：暗号資産メディアとして良好な水準。世界順位 646555位。</span></div></div>
   <div class="seo-footer-row"><span>Discover依存度 <strong>64%</strong> &nbsp;·&nbsp; 1記事依存度 <strong>33%</strong> &nbsp;·&nbsp; PageRank <strong>4.05</strong></span><span>データ: 2026-04-10〜2026-05-08 &nbsp;|&nbsp; <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SEO" target="_blank" rel="noopener">BITTIMES-SEO</a></span></div>
@@ -1168,15 +1265,44 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="chart-modal">
+  <div class="chart-modal-inner">
+    <div class="chart-modal-header">
+      <span class="chart-modal-title" id="chart-title"></span>
+      <button class="chart-close" onclick="closeChart()">✕</button>
+    </div>
+    <div class="chart-period-bar">
+      <button class="chart-period-btn" data-period="7d" onclick="renderChart('7d')">7日</button>
+      <button class="chart-period-btn active" data-period="30d" onclick="renderChart('30d')">30日</button>
+      <button class="chart-period-btn" data-period="90d" onclick="renderChart('90d')">3ヶ月</button>
+      <button class="chart-period-btn" data-period="all" onclick="renderChart('all')">全期間</button>
+    </div>
+    <div id="chart-svg-container"></div>
+    <p class="chart-modal-note">※ 毎日データが蓄積されます</p>
+  </div>
+</div>
+
 <script>
 
 var QUEUE = [{"id": "sample-2026-W19-001", "dept": "seo", "priority": "high", "title": "MetaMask記事（115969）クラスター内リンク最終確認・公開承認", "detail": "MetaMask記事のリライトが完了しました。クラスター内の全9記事との双方向リンクを確認済みです。WPへの更新・Notionカード登録まで完了しています。Google Search Consoleでインデックス登録リクエストを送る前に承認をお願いします。", "created_at": "2026-05-10", "action": {"type": "none"}}];
+var SEO_HISTORY = [{"date": "2026-05-03", "web_clicks": 3486, "web_impr": 330399, "avg_position": 20.6, "disc_clicks": 7247, "sessions": 44367, "eng_rate": 31.3, "page_views": 58189, "pagerank": 4.05}, {"date": "2026-05-06", "web_clicks": 3716, "web_impr": 355703, "avg_position": 23.74, "disc_clicks": 7248, "sessions": 45222, "eng_rate": 31.1, "page_views": 58757, "pagerank": 4.05}, {"date": "2026-05-07", "web_clicks": 3765, "web_impr": 357566, "avg_position": 23.62, "disc_clicks": 7248, "sessions": 45218, "eng_rate": 31.269999999999996, "page_views": 58778, "pagerank": 4.05}, {"date": "2026-05-11", "web_clicks": 3996, "web_impr": 390498, "avg_position": 23.62, "disc_clicks": 7248, "sessions": 49164, "eng_rate": 35.97, "page_views": 63428, "pagerank": 4.05}];
 var GH_ORG = "SIMPLIFY-CoLtd";
 var MASTER_REPO = "BITTIMES-Master";
 
 var DEPT_COLORS = {
   news: '#4f9cf9', seo: '#a78bfa', campaign: '#f59e0b',
   feature: '#34d399', marketing: '#f472b6', sns: '#fb923c', audit: '#94a3b8'
+};
+
+var METRIC_FMT = {
+  web_clicks:   function(v) { return v >= 1000 ? (v/1000).toFixed(1)+'k' : String(Math.round(v)); },
+  web_impr:     function(v) { return v >= 1000 ? (v/1000).toFixed(0)+'k' : String(Math.round(v)); },
+  avg_position: function(v) { return v.toFixed(1); },
+  disc_clicks:  function(v) { return v >= 1000 ? (v/1000).toFixed(1)+'k' : String(Math.round(v)); },
+  sessions:     function(v) { return v >= 1000 ? (v/1000).toFixed(1)+'k' : String(Math.round(v)); },
+  eng_rate:     function(v) { return v.toFixed(1)+'%'; },
+  page_views:   function(v) { return v >= 1000 ? (v/1000).toFixed(1)+'k' : String(Math.round(v)); },
+  pagerank:     function(v) { return v.toFixed(2); }
 };
 
 var TOKEN_KEY = 'bittimes_gh_token';
@@ -1406,6 +1532,144 @@ function switchTab(name) {
   });
 }
 
+/* ── Chart modal ── */
+function openChart(metricKey, label, color) {
+  var overlay = document.getElementById('chart-modal');
+  if (!overlay) return;
+  overlay._metricKey = metricKey;
+  overlay._label = label;
+  overlay._color = color;
+  overlay.classList.add('open');
+  renderChart('30d');
+}
+
+function closeChart() {
+  var overlay = document.getElementById('chart-modal');
+  if (overlay) overlay.classList.remove('open');
+}
+
+function renderChart(period) {
+  var overlay = document.getElementById('chart-modal');
+  if (!overlay) return;
+  var metricKey = overlay._metricKey;
+  var label = overlay._label;
+  var color = overlay._color;
+
+  document.querySelectorAll('.chart-period-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.period === period);
+  });
+  var titleEl = document.getElementById('chart-title');
+  if (titleEl) titleEl.textContent = label;
+
+  var days = period === '7d' ? 7 : period === '30d' ? 30 : period === '90d' ? 90 : 9999;
+  var cutoff = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
+  var data = SEO_HISTORY.filter(function(d) { return d.date >= cutoff; });
+
+  var container = document.getElementById('chart-svg-container');
+  if (container) container.innerHTML = buildSvgChart(data, metricKey, color);
+}
+
+function buildSvgChart(data, metricKey, color) {
+  var W = 600, H = 210, PL = 54, PR = 16, PT = 16, PB = 38;
+  var innerW = W - PL - PR, innerH = H - PT - PB;
+  var fmt = METRIC_FMT[metricKey] || function(v) { return String(Math.round(v)); };
+
+  if (!data || data.length < 2) {
+    var msg = data && data.length === 1 ? 'データが1点のみです — 日々蓄積されます' : 'データ蓄積中です（毎日追加されます）';
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto">'
+      + '<text x="' + (W/2) + '" y="' + (H/2) + '" fill="#3d4a5c" text-anchor="middle" font-size="13" font-family="Inter,sans-serif">' + msg + '</text>'
+      + '</svg>';
+  }
+
+  var vals = data.map(function(d) {
+    var v = d[metricKey];
+    return (typeof v === 'number' && !isNaN(v)) ? v : null;
+  });
+  var validVals = vals.filter(function(v) { return v !== null; });
+  if (!validVals.length) {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto">'
+      + '<text x="' + (W/2) + '" y="' + (H/2) + '" fill="#3d4a5c" text-anchor="middle" font-size="13" font-family="Inter,sans-serif">データなし</text>'
+      + '</svg>';
+  }
+
+  var minV = Math.min.apply(null, validVals);
+  var maxV = Math.max.apply(null, validVals);
+  if (minV === maxV) { minV = minV * 0.9; maxV = maxV * 1.1 + 0.01; }
+  var pad = (maxV - minV) * 0.15;
+  minV -= pad; maxV += pad;
+  var range = maxV - minV;
+  var n = data.length;
+
+  function xPos(i) { return PL + (n > 1 ? i / (n - 1) * innerW : innerW / 2); }
+  function yPos(v) { return PT + innerH - (v - minV) / range * innerH; }
+
+  /* Y-axis grid + labels */
+  var grid = '';
+  var tickCount = 4;
+  for (var t = 0; t <= tickCount; t++) {
+    var gv = minV + range * t / tickCount;
+    var gy = yPos(gv);
+    grid += '<line x1="' + PL + '" y1="' + gy.toFixed(1) + '" x2="' + (W-PR) + '" y2="' + gy.toFixed(1) + '" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>';
+    grid += '<text x="' + (PL-5) + '" y="' + (gy+4).toFixed(1) + '" fill="#3d4a5c" text-anchor="end" font-size="10" font-family="Inter,sans-serif">' + fmt(gv) + '</text>';
+  }
+
+  /* Line path */
+  var segments = [];
+  var current = [];
+  data.forEach(function(d, i) {
+    var v = vals[i];
+    if (v !== null) {
+      current.push([xPos(i), yPos(v)]);
+    } else if (current.length) {
+      segments.push(current);
+      current = [];
+    }
+  });
+  if (current.length) segments.push(current);
+
+  var linePaths = '';
+  var areaPaths = '';
+  segments.forEach(function(seg) {
+    if (seg.length < 2) return;
+    var d = seg.map(function(p, i) { return (i===0?'M':'L') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    var bottom = PT + innerH;
+    var area = d + ' L' + seg[seg.length-1][0].toFixed(1) + ' ' + bottom + ' L' + seg[0][0].toFixed(1) + ' ' + bottom + ' Z';
+    linePaths += '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    areaPaths += '<path d="' + area + '" fill="url(#cg)"/>';
+  });
+
+  /* Dots + x-axis labels */
+  var dots = '';
+  var xLabels = '';
+  var step = n <= 12 ? 1 : Math.ceil(n / 12);
+  data.forEach(function(d, i) {
+    var v = vals[i];
+    if (v !== null) {
+      var cx = xPos(i).toFixed(1), cy = yPos(v).toFixed(1);
+      dots += '<circle cx="' + cx + '" cy="' + cy + '" r="3.5" fill="' + color + '" stroke="#0e1220" stroke-width="1.5"/>';
+      /* tooltip-style value above dot */
+      if (n <= 10) {
+        dots += '<text x="' + cx + '" y="' + (yPos(v)-8).toFixed(1) + '" fill="' + color + '" text-anchor="middle" font-size="9" font-family="Inter,sans-serif" opacity="0.8">' + fmt(v) + '</text>';
+      }
+    }
+    if (i % step === 0 || i === n-1) {
+      xLabels += '<text x="' + xPos(i).toFixed(1) + '" y="' + (H-7) + '" fill="#3d4a5c" text-anchor="middle" font-size="9" font-family="Inter,sans-serif">' + d.date.slice(5) + '</text>';
+    }
+  });
+
+  return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto">'
+    + '<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">'
+    + '<stop offset="0%" stop-color="' + color + '" stop-opacity="0.22"/>'
+    + '<stop offset="100%" stop-color="' + color + '" stop-opacity="0"/>'
+    + '</linearGradient></defs>'
+    + grid
+    + areaPaths
+    + linePaths
+    + dots
+    + xLabels
+    + '</svg>';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   renderQueue();
   updateSettingsBtn();
@@ -1416,10 +1680,19 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Escape') closeTokenModal();
     });
   }
-  var overlay = document.getElementById('token-modal');
-  if (overlay) {
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeTokenModal();
+  var tokenOverlay = document.getElementById('token-modal');
+  if (tokenOverlay) {
+    tokenOverlay.addEventListener('click', function(e) {
+      if (e.target === tokenOverlay) closeTokenModal();
+    });
+  }
+  var chartOverlay = document.getElementById('chart-modal');
+  if (chartOverlay) {
+    chartOverlay.addEventListener('click', function(e) {
+      if (e.target === chartOverlay) closeChart();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && chartOverlay.classList.contains('open')) closeChart();
     });
   }
 });
