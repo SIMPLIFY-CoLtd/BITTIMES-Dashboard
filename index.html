@@ -939,6 +939,104 @@
   .seo-footer-row a { color: var(--accent); text-decoration: none; }
   .seo-footer-row a:hover { text-decoration: underline; }
 
+  /* ── AI Search panel ── */
+  .ai-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 26px;
+    margin-bottom: 28px;
+  }
+
+  .ai-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .ai-panel-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+  }
+
+  .ai-panel-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .ai-total-block {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .ai-total-num {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+
+  .ai-total-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .ai-source-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ai-source-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ai-source-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .ai-bar-track {
+    height: 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .ai-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.6s ease;
+  }
+
+  .ai-source-stat {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .ai-zero-msg {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 32px 0;
+  }
+
   /* ── Tab bar ── */
   .tab-bar {
     display: flex;
@@ -1062,7 +1160,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W20</span></div>
-          <div>更新: 2026-05-14 08:50 JST</div>
+          <div>更新: 2026-05-14 15:32 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
