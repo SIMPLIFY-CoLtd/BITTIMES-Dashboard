@@ -12,14 +12,14 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #060810;
-    --surface: rgba(255,255,255,0.035);
-    --surface-hover: rgba(255,255,255,0.065);
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.16);
-    --text-primary: #eef0f8;
-    --text-secondary: #8892a4;
-    --text-muted: #3d4a5c;
+    --bg: #07090f;
+    --surface: #111827;
+    --surface-hover: #1a2235;
+    --border: rgba(255,255,255,0.12);
+    --border-hover: rgba(255,255,255,0.28);
+    --text-primary: #f0f4ff;
+    --text-secondary: #a8b5cc;
+    --text-muted: #6b7f96;
     --accent: #4f9cf9;
   }
 
@@ -287,7 +287,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 12px 20px;
+    padding: 14px 22px;
     min-width: 120px;
   }
 
@@ -709,7 +709,7 @@
   }
 
   .seo-card {
-    background: rgba(255,255,255,0.025);
+    background: rgba(255,255,255,0.05);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 14px 16px;
@@ -717,8 +717,8 @@
     cursor: pointer;
   }
   .seo-card:hover {
-    background: rgba(255,255,255,0.055);
-    border-color: rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.22);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
   }
@@ -800,8 +800,8 @@
 
   .bar-track {
     flex: 1;
-    height: 7px;
-    background: rgba(255,255,255,0.06);
+    height: 10px;
+    background: rgba(255,255,255,0.08);
     border-radius: 99px;
     overflow: hidden;
   }
@@ -809,19 +809,23 @@
   .bar-fill {
     height: 100%;
     border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent), #a78bfa);
+    background: linear-gradient(90deg, #4f9cf9, #818cf8);
   }
 
   .bar-fill.green  { background: linear-gradient(90deg, #10d98a, #34d399); }
   .bar-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-  .bar-fill.pink   { background: linear-gradient(90deg, #f472b6, #fb923c); }
+  .bar-fill.pink   { background: linear-gradient(90deg, #f472b6, #e879a0); }
+  .bar-fill.teal   { background: linear-gradient(90deg, #14b8a6, #06b6d4); }
+  .bar-fill.purple { background: linear-gradient(90deg, #a78bfa, #818cf8); }
+  .bar-fill.muted  { background: rgba(255,255,255,0.25); }
 
   .bar-pct {
-    color: var(--text-muted);
+    color: var(--text-secondary);
     width: 36px;
     text-align: right;
     flex-shrink: 0;
     font-size: 11px;
+    font-weight: 600;
   }
 
   /* アクションエリア */
@@ -1160,7 +1164,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W20</span></div>
-          <div>更新: 2026-05-14 16:47 JST</div>
+          <div>更新: 2026-05-14 17:00 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -1361,7 +1365,7 @@
 <div class="seo-panel">
   <div class="seo-panel-head"><span class="seo-panel-title">🔍 SEO スナップショット</span><span class="seo-panel-meta">取得: 2026-05-14</span></div>
   <div class="seo-cards"><div class="seo-card" onclick="openChart('web_clicks', 'Web検索クリック', '#4f9cf9')"><div class="l">Web検索クリック</div><div class="v" style="color:#4f9cf9">4,461</div><div class="s">28日間 GSC</div></div><div class="seo-card" onclick="openChart('web_impr', '表示回数', '#94a3b8')"><div class="l">表示回数</div><div class="v" style="color:#94a3b8">382,231</div><div class="s">Web検索</div></div><div class="seo-card" onclick="openChart('avg_position', '平均掲載順位', '#a78bfa')"><div class="l">平均掲載順位</div><div class="v" style="color:#a78bfa">20.5位</div><div class="s">CTR 1.17%</div></div><div class="seo-card" onclick="openChart('disc_clicks', 'Discoverクリック', '#10d98a')"><div class="l">Discoverクリック</div><div class="v" style="color:#10d98a">15,208</div><div class="s">12URL · CTR 10.7%</div></div></div><div class="seo-cards"><div class="seo-card" onclick="openChart('sessions', 'GA4 セッション', '#4f9cf9')"><div class="l">GA4 セッション</div><div class="v" style="color:#4f9cf9">49,231</div><div class="s">ユーザー 37,977</div></div><div class="seo-card" onclick="openChart('eng_rate', 'エンゲージメント率', '#f59e0b')"><div class="l">エンゲージメント率</div><div class="v" style="color:#f59e0b">38.0%</div><div class="s">平均滞在 1分31秒</div></div><div class="seo-card" onclick="openChart('page_views', 'PV', '#94a3b8')"><div class="l">PV</div><div class="v" style="color:#94a3b8">64,455</div><div class="s">28日間</div></div><div class="seo-card" onclick="openChart('pagerank', 'PageRank', '#f472b6')"><div class="l">PageRank</div><div class="v" style="color:#f472b6">4.05</div><div class="s">世界 646,555位</div></div></div>
-  <div class="seo-charts"><div><div class="seo-sub-head">流入チャネル</div><div class="bar-row"><span class="bar-label">Direct</span><span class="bar-track"><span class="bar-fill green" style="width:41.0%"></span></span><span class="bar-pct">41%</span></div><div class="bar-row"><span class="bar-label">Organic Search</span><span class="bar-track"><span class="bar-fill" style="width:33.3%"></span></span><span class="bar-pct">33%</span></div><div class="bar-row"><span class="bar-label">Organic Social</span><span class="bar-track"><span class="bar-fill pink" style="width:23.2%"></span></span><span class="bar-pct">23%</span></div><div class="bar-row"><span class="bar-label">Referral</span><span class="bar-track"><span class="bar-fill orange" style="width:1.6%"></span></span><span class="bar-pct">2%</span></div><div class="bar-row"><span class="bar-label">Unassigned</span><span class="bar-track"><span class="bar-fill" style="width:0.8%"></span></span><span class="bar-pct">1%</span></div></div><div><div class="seo-sub-head">デバイス</div><div class="bar-row"><span class="bar-label">モバイル</span><span class="bar-track"><span class="bar-fill green" style="width:68.6%"></span></span><span class="bar-pct">69%</span></div><div class="bar-row"><span class="bar-label">デスクトップ</span><span class="bar-track"><span class="bar-fill" style="width:29.8%"></span></span><span class="bar-pct">30%</span></div><div class="bar-row"><span class="bar-label">タブレット</span><span class="bar-track"><span class="bar-fill orange" style="width:1.5%"></span></span><span class="bar-pct">2%</span></div></div></div>
+  <div class="seo-charts"><div><div class="seo-sub-head">流入チャネル</div><div class="bar-row"><span class="bar-label">Direct</span><span class="bar-track"><span class="bar-fill green" style="width:41.0%"></span></span><span class="bar-pct">41%</span></div><div class="bar-row"><span class="bar-label">Organic Search</span><span class="bar-track"><span class="bar-fill" style="width:33.3%"></span></span><span class="bar-pct">33%</span></div><div class="bar-row"><span class="bar-label">Organic Social</span><span class="bar-track"><span class="bar-fill pink" style="width:23.2%"></span></span><span class="bar-pct">23%</span></div><div class="bar-row"><span class="bar-label">Referral</span><span class="bar-track"><span class="bar-fill orange" style="width:1.6%"></span></span><span class="bar-pct">2%</span></div><div class="bar-row"><span class="bar-label">Unassigned</span><span class="bar-track"><span class="bar-fill muted" style="width:0.8%"></span></span><span class="bar-pct">1%</span></div></div><div><div class="seo-sub-head">デバイス</div><div class="bar-row"><span class="bar-label">モバイル</span><span class="bar-track"><span class="bar-fill green" style="width:68.6%"></span></span><span class="bar-pct">69%</span></div><div class="bar-row"><span class="bar-label">デスクトップ</span><span class="bar-track"><span class="bar-fill" style="width:29.8%"></span></span><span class="bar-pct">30%</span></div><div class="bar-row"><span class="bar-label">タブレット</span><span class="bar-track"><span class="bar-fill orange" style="width:1.5%"></span></span><span class="bar-pct">2%</span></div></div></div>
   <div class="seo-actions-section"><div class="seo-sub-head">改善アクション</div><div class="seo-action-chips"><details class="seo-pending-details"><summary class="seo-action-chip seo-pending-summary"><span class="ind-dot dot-crit"></span><span class="seo-chip-label">未着手タスク（Notion）</span><span class="seo-chip-val" style="color:#ff6b6b">5件</span></summary><ul class="pending-task-list"><li class="pending-task-item">【SEO】robots.txt 最適化</li><li class="pending-task-item">【運用】Gunosy ⑤ 配信開始の確認</li><li class="pending-task-item">【Discover】週次まとめ記事の定期公開フォーマット設計</li><li class="pending-task-item">【UI/UX】ナビメニュー・トップページ・サイドバー監査</li><li class="pending-task-item">【SEO】内部リンク強化（クラスター間のリンク網整備）</li></ul></details></div><div class="seo-alert-chip"><span class="alert-badge critical">critical</span><span class="seo-alert-msg">単一記事依存度72.20%超：https://bittimes.net/news/222637.htmlがDiscoverクリックの72.20%を占有。記事のDiscover掲載終了でサイト全体…</span></div><div class="seo-alert-chip"><span class="alert-badge info">info</span><span class="seo-alert-msg">PageRank 4（小数4.05）：暗号資産メディアとして良好な水準。世界順位 646555位。</span></div></div>
   <div class="seo-footer-row"><span>Discover依存度 <strong>77%</strong> &nbsp;·&nbsp; 1記事依存度 <strong>72%</strong> &nbsp;·&nbsp; PageRank <strong>4.05</strong></span><span>データ: 2026-04-13〜2026-05-11 &nbsp;|&nbsp; <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SEO" target="_blank" rel="noopener">BITTIMES-SEO</a></span></div>
 </div>
