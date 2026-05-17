@@ -1143,6 +1143,120 @@
     text-align: right;
   }
 
+  /* ── Dept Drawer ── */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .drawer-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: min(480px, 100vw);
+    height: 100vh;
+    background: #111827;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1001;
+    padding: 28px 24px 40px;
+  }
+  .drawer-overlay.open .drawer-panel { transform: translateX(0); }
+
+  .drawer-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .drawer-title-wrap { display: flex; align-items: center; gap: 12px; }
+  .drawer-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .drawer-name { font-size: 17px; font-weight: 700; }
+  .drawer-dept-status { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+  .drawer-close {
+    background: none; border: none;
+    color: var(--text-muted); font-size: 20px;
+    cursor: pointer; padding: 4px 8px;
+    border-radius: 6px; line-height: 1;
+    transition: background 0.15s, color 0.15s;
+  }
+  .drawer-close:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+
+  .drawer-github-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--accent);
+    text-decoration: none; margin-bottom: 22px;
+    padding: 5px 12px;
+    border: 1px solid rgba(79,156,249,0.25); border-radius: 20px;
+    transition: background 0.15s;
+  }
+  .drawer-github-link:hover { background: rgba(79,156,249,0.08); }
+
+  .drawer-section-title {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-muted); margin-bottom: 12px;
+  }
+
+  .schedule-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+  }
+  .schedule-name { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .schedule-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px; flex-wrap: wrap;
+  }
+  .cron-expr {
+    font-family: 'SF Mono','Fira Code',monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.06);
+    padding: 2px 8px; border-radius: 4px; color: var(--accent);
+  }
+  .schedule-human { font-size: 11px; color: #10d98a; }
+  .schedule-owner {
+    font-size: 10px; padding: 2px 8px; border-radius: 20px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .owner-vps { background: rgba(245,166,35,0.12); color: #f5a623; border: 1px solid rgba(245,166,35,0.2); }
+  .owner-ga  { background: rgba(79,156,249,0.12);  color: var(--accent); border: 1px solid rgba(79,156,249,0.2); }
+  .schedule-command {
+    font-size: 11px; color: var(--text-muted);
+    font-family: 'SF Mono','Fira Code',monospace;
+  }
+  .schedule-desc { font-size: 12px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5; }
+
+  .btn-dispatch {
+    margin-top: 10px; padding: 6px 16px; border-radius: 7px;
+    border: 1px solid rgba(79,156,249,0.3);
+    background: rgba(79,156,249,0.1); color: var(--accent);
+    font-size: 11px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .btn-dispatch:hover { background: rgba(79,156,249,0.2); border-color: rgba(79,156,249,0.5); box-shadow: 0 0 12px rgba(79,156,249,0.2); }
+  .btn-dispatch:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .drawer-empty { color: var(--text-muted); font-size: 13px; padding: 20px 0; text-align: center; }
+
+  .cron-count { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+  .cron-count.has-cron { color: #f5a623; }
+  .card { cursor: pointer; }
+
 </style>
 </head>
 <body>
@@ -1165,7 +1279,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W20</span></div>
-          <div>更新: 2026-05-17 15:17 JST</div>
+          <div>更新: 2026-05-17 16:00 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -1205,7 +1319,7 @@
 
   <div id="tab-dept">
     <div class="grid">
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('news')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">📰</div>
@@ -1221,13 +1335,14 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-News" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-News" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-News
         </a>
+        <div class="cron-count has-cron">⏰ 定期実行 5件</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('seo')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">🔍</div>
@@ -1243,13 +1358,14 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SEO" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SEO" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-SEO
         </a>
+        <div class="cron-count has-cron">⏰ 定期実行 2件</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('campaign')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">🎯</div>
@@ -1265,13 +1381,14 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Campaign" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Campaign" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-Campaign
         </a>
+        <div class="cron-count has-cron">⏰ 定期実行 2件</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('feature')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">📝</div>
@@ -1287,13 +1404,14 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Feature" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Feature" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-Feature
         </a>
+        <div class="cron-count">⏰ 定期実行なし</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('marketing')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">💰</div>
@@ -1309,13 +1427,14 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Marketing" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Marketing" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-Marketing
         </a>
+        <div class="cron-count">⏰ 定期実行なし</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('sns')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">📱</div>
@@ -1331,16 +1450,17 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SNS" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-SNS" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-SNS
         </a>
+        <div class="cron-count">⏰ 定期実行なし</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('tensaku')">
       <div class="card-header">
         <div class="dept-info">
-          <div class="dept-icon">🏢</div>
+          <div class="dept-icon">✏️</div>
           <div>
             <div class="dept-name">添削部署</div>
             <div class="dept-id">tensaku</div>
@@ -1353,13 +1473,14 @@
         <div class="indicators"><span style="color:#4a5568;font-size:12px">データなし</span></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Tensaku" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Tensaku" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-Tensaku
         </a>
+        <div class="cron-count has-cron">⏰ 定期実行 1件</div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" onclick="openDeptDrawer('audit')">
       <div class="card-header">
         <div class="dept-info">
           <div class="dept-icon">🔎</div>
@@ -1375,10 +1496,11 @@
         <div class="indicators"><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Critical</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div><div class="indicator"><span class="ind-label"><span class="ind-dot dot-ok"></span>Warning</span><span class="ind-value"><span style="color:#10d98a">なし</span></span></div></div>
       </div>
       <div class="card-footer">
-        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Audit" target="_blank" rel="noopener">
+        <a class="repo-link" href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Audit" target="_blank" rel="noopener" onclick="event.stopPropagation()">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           SIMPLIFY-CoLtd/BITTIMES-Audit
         </a>
+        <div class="cron-count has-cron">⏰ 定期実行 1件</div>
       </div>
     </div>
     </div>
@@ -1455,12 +1577,31 @@
   </div>
 </div>
 
+<div class="drawer-overlay" id="dept-drawer" onclick="closeDeptDrawer(event)">
+  <div class="drawer-panel">
+    <div class="drawer-header">
+      <div class="drawer-title-wrap">
+        <div class="drawer-icon" id="drawer-icon"></div>
+        <div>
+          <div class="drawer-name" id="drawer-name"></div>
+          <div class="drawer-dept-status" id="drawer-dept-status"></div>
+        </div>
+      </div>
+      <button class="drawer-close" onclick="closeDeptDrawerBtn()">✕</button>
+    </div>
+    <a class="drawer-github-link" id="drawer-github-link" href="#" target="_blank" rel="noopener">GitHubで開く ↗</a>
+    <div class="drawer-section-title" id="drawer-schedule-count">定期実行</div>
+    <div id="drawer-schedules"></div>
+  </div>
+</div>
+
 <script>
 
 var QUEUE = [];
 var SEO_HISTORY = [{"date": "2026-05-03", "web_clicks": 3486, "web_impr": 330399, "avg_position": 20.6, "disc_clicks": 7247, "sessions": 44367, "eng_rate": 31.3, "page_views": 58189, "pagerank": 4.05}, {"date": "2026-05-06", "web_clicks": 3716, "web_impr": 355703, "avg_position": 23.74, "disc_clicks": 7248, "sessions": 45222, "eng_rate": 31.1, "page_views": 58757, "pagerank": 4.05}, {"date": "2026-05-07", "web_clicks": 3765, "web_impr": 357566, "avg_position": 23.62, "disc_clicks": 7248, "sessions": 45218, "eng_rate": 31.269999999999996, "page_views": 58778, "pagerank": 4.05}, {"date": "2026-05-12", "web_clicks": 4222, "web_impr": 394584, "avg_position": 23.23, "disc_clicks": 13910, "sessions": 49185, "eng_rate": 37.2, "page_views": 63201, "pagerank": 4.05}, {"date": "2026-05-13", "web_clicks": 4384, "web_impr": 381403, "avg_position": 20.52, "disc_clicks": 14814, "sessions": 49584, "eng_rate": 37.35, "page_views": 64138, "pagerank": 4.05}, {"date": "2026-05-14", "web_clicks": 4461, "web_impr": 382231, "avg_position": 20.47, "disc_clicks": 15208, "sessions": 49231, "eng_rate": 37.97, "page_views": 64455, "pagerank": 4.05}, {"date": "2026-05-15", "web_clicks": 4592, "web_impr": 386510, "avg_position": 20.27, "disc_clicks": 15413, "sessions": 49041, "eng_rate": 38.56, "page_views": 64165, "pagerank": 4.05}, {"date": "2026-05-16", "web_clicks": 4604, "web_impr": 392831, "avg_position": 19.92, "disc_clicks": 15322, "sessions": 42514, "eng_rate": 38.66, "page_views": 56899, "pagerank": 4.05}, {"date": "2026-05-17", "web_clicks": 4740, "web_impr": 406748, "avg_position": 19.35, "disc_clicks": 15188, "sessions": 48620, "eng_rate": 38.83, "page_views": 63471, "pagerank": 4.05}];
 var GH_ORG = "SIMPLIFY-CoLtd";
 var MASTER_REPO = "BITTIMES-Master";
+var DEPT_DATA = {"news": {"id": "news", "name": "ニュース部署", "status": "phase2-active", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-News", "icon": "📰", "schedules": [{"name": "ニュース下書き生成", "cron": "0 9,12,15,18,20 * * 1-6", "tz": "JST", "owner": "vps", "command": "python main.py", "description": "RSSから記事を生成しWP下書き保存", "human": "月〜土 09:00/12:00/15:00/18:00/20:00 (JST)"}, {"name": "cleanup", "cron": "30 1 * * *", "tz": "JST", "owner": "vps", "command": "python cleanup.py", "description": "古いログ・一時ファイルを削除", "human": "毎日 01:30 (JST)"}, {"name": "cost_notifier", "cron": "30 20 * * *", "tz": "JST", "owner": "vps", "command": "python cost_notifier.py", "description": "API利用コストをTelegramに通知", "human": "毎日 20:30 (JST)"}, {"name": "news_noindex", "cron": "0 4 1 * *", "tz": "JST", "owner": "vps", "command": "python news_noindex.py", "description": "月1回・古いニュース記事をnoindex化", "human": "月1日 04:00 (JST)"}, {"name": "weekly_feature_check", "cron": "0 12 * * 1", "tz": "JST", "owner": "vps", "command": "python weekly_feature_check.py", "description": "毎週月曜・特集記事の週次チェック", "human": "毎週月曜 12:00 (JST)"}]}, "seo": {"id": "seo", "name": "SEO部署", "status": "phase2-active", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-SEO", "icon": "🔍", "schedules": [{"name": "SEOデータ取得（日次）", "cron": "0 22 * * *", "tz": "UTC", "owner": "github-actions", "workflow": "daily-fetch.yml", "repo": "BITTIMES-SEO", "description": "GSC/GA4/Ahrefs から SEO指標を取得・集計しダッシュボードデータを生成", "human": "毎日 22:00 (UTC)"}, {"name": "週次SEOレポート", "cron": "0 22 * * 0", "tz": "UTC", "owner": "github-actions", "workflow": "weekly-report.yml", "repo": "BITTIMES-SEO", "description": "週次レポートを生成・Notionに書き出し", "human": "dow:0 22:00 (UTC)"}]}, "campaign": {"id": "campaign", "name": "キャンペーン記事部署", "status": "phase2-active", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-Campaign", "icon": "🎯", "schedules": [{"name": "キャンペーン記事生成（昼）", "cron": "0 12 * * 1-5", "tz": "JST", "owner": "vps", "command": "python main.py", "description": "新着キャンペーンを検出しWP下書き保存", "human": "平日 12:00 (JST)"}, {"name": "キャンペーン記事生成（夕）", "cron": "0 18 * * 1-5", "tz": "JST", "owner": "vps", "command": "python main.py", "description": "新着キャンペーンを検出しWP下書き保存", "human": "平日 18:00 (JST)"}]}, "feature": {"id": "feature", "name": "特集記事部署", "status": "phase2-active", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-Feature", "icon": "📝", "schedules": []}, "marketing": {"id": "marketing", "name": "マーケティング部署", "status": "phase2-active", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-Marketing", "icon": "💰", "schedules": []}, "sns": {"id": "sns", "name": "SNS部署", "status": "phase2-active", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-SNS", "icon": "📱", "schedules": []}, "tensaku": {"id": "tensaku", "name": "添削部署", "status": "phase1-mirror", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-Tensaku", "icon": "✏️", "schedules": [{"name": "添削実行", "cron": "*/5 * * * *", "tz": "JST", "owner": "vps", "command": "python main.py", "description": "WP下書きを取得・Claude Sonnet で添削・Phase 0はDRY_RUN=true", "human": "5分おき"}]}, "audit": {"id": "audit", "name": "監査部署", "status": "phase1-mirror", "repo": "github.com/SIMPLIFY-CoLtd/BITTIMES-Audit", "icon": "🔎", "schedules": [{"name": "週次監査レポート生成", "cron": "0 3 * * MON", "tz": "UTC", "owner": "github-actions", "workflow": "audit-cron.yml", "repo": "BITTIMES-Master", "description": "全部署のGitHub状態を監査しTelegram通知", "human": "毎週月曜 03:00 (UTC)"}]}};
 
 var DEPT_COLORS = {
   news: '#4f9cf9', seo: '#a78bfa', campaign: '#f59e0b',
@@ -1867,7 +2008,101 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Escape' && chartOverlay.classList.contains('open')) closeChart();
     });
   }
+  document.addEventListener('keydown', function(e) {
+    var drawer = document.getElementById('dept-drawer');
+    if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+      drawer.classList.remove('open');
+    }
+  });
 });
+
+// ── Dept Drawer ───────────────────────────────────────────────
+
+function openDeptDrawer(deptId) {
+  var dept = DEPT_DATA[deptId];
+  if (!dept) return;
+  var overlay = document.getElementById('dept-drawer');
+  if (!overlay) return;
+
+  document.getElementById('drawer-icon').textContent = dept.icon;
+  document.getElementById('drawer-name').textContent = dept.name;
+  document.getElementById('drawer-dept-status').textContent = dept.status;
+  var ghLink = document.getElementById('drawer-github-link');
+  ghLink.href = 'https://' + dept.repo;
+
+  var schedules = dept.schedules || [];
+  document.getElementById('drawer-schedule-count').textContent =
+    '定期実行（' + schedules.length + '件）';
+
+  var container = document.getElementById('drawer-schedules');
+  if (schedules.length === 0) {
+    container.innerHTML = '<div class="drawer-empty">定期実行なし</div>';
+  } else {
+    container.innerHTML = schedules.map(function(s, i) {
+      var ownerClass = s.owner === 'vps' ? 'owner-vps' : 'owner-ga';
+      var ownerLabel = s.owner === 'vps' ? 'VPS' : 'GitHub Actions';
+      var dispatchBtn = (s.owner === 'github-actions' && s.workflow && s.repo)
+        ? '<button class="btn-dispatch" id="dispatch-btn-' + deptId + '-' + i +
+          '" onclick="event.stopPropagation();dispatchWorkflow(\'' + (s.repo||'') + '\',\'' + (s.workflow||'') + '\',\'' + deptId + '-' + i + '\')">▶ 即時実行</button>'
+        : '';
+      return '<div class="schedule-card">' +
+        '<div class="schedule-name">' + (s.name||'') + '</div>' +
+        '<div class="schedule-row">' +
+          '<span class="cron-expr">' + (s.cron||'') + ' (' + (s.tz||'UTC') + ')</span>' +
+          (s.human ? '<span class="schedule-human">→ ' + s.human + '</span>' : '') +
+        '</div>' +
+        '<div class="schedule-row">' +
+          '<span class="schedule-owner ' + ownerClass + '">' + ownerLabel + '</span>' +
+          (s.command ? '<span class="schedule-command">' + s.command + '</span>' : '') +
+        '</div>' +
+        (s.description ? '<div class="schedule-desc">' + s.description + '</div>' : '') +
+        dispatchBtn +
+      '</div>';
+    }).join('');
+  }
+  overlay.classList.add('open');
+}
+
+function closeDeptDrawer(e) {
+  if (e && e.target !== document.getElementById('dept-drawer')) return;
+  document.getElementById('dept-drawer').classList.remove('open');
+}
+
+function closeDeptDrawerBtn() {
+  document.getElementById('dept-drawer').classList.remove('open');
+}
+
+async function dispatchWorkflow(repo, workflow, key) {
+  var token = getToken();
+  if (!token) { openTokenModal(function() { dispatchWorkflow(repo, workflow, key); }); return; }
+  var btn = document.getElementById('dispatch-btn-' + key);
+  if (btn) { btn.textContent = '実行中...'; btn.disabled = true; }
+  try {
+    var res = await fetch(
+      'https://api.github.com/repos/' + GH_ORG + '/' + repo +
+      '/actions/workflows/' + workflow + '/dispatches',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main', inputs: {} }),
+      }
+    );
+    if (res.status !== 204) {
+      var errText = await res.text();
+      throw new Error('GitHub API ' + res.status + ': ' + errText);
+    }
+    toast('✅ ワークフロー実行開始: ' + workflow);
+    if (btn) { btn.textContent = '▶ 即時実行'; btn.disabled = false; }
+  } catch (e) {
+    toast('❌ ' + e.message, true);
+    if (btn) { btn.textContent = '▶ 即時実行'; btn.disabled = false; }
+  }
+}
 
 </script>
 </body>
