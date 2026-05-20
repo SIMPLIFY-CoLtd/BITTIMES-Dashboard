@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="3600">
+<meta name="build-time" content="2026-05-20 22:19 JST">
 <title>BITTIMES Master Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1427,7 +1429,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W21</span></div>
-          <div>更新: 2026-05-20 20:20 JST</div>
+          <div>更新: 2026-05-20 22:19 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -1705,7 +1707,7 @@
   </div>
 
   <footer class="footer">
-    <div class="live-indicator"><span class="live-dot"></span>毎日 JST 8:00 自動更新</div>
+    <div class="live-indicator"><span class="live-dot"></span>最終更新: 2026-05-20 22:19 JST &nbsp;·&nbsp; <span id="next-update-countdown">次回更新を計算中…</span></div>
     <div>
       <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Master" target="_blank" rel="noopener">BITTIMES-Master</a>
       &nbsp;·&nbsp;
@@ -2300,6 +2302,33 @@ async function dispatchWorkflow(repo, workflow, key) {
     if (btn) { btn.textContent = '▶ 即時実行'; btn.disabled = false; }
   }
 }
+
+// ── 次回更新カウントダウン ─────────────────────────────────────────────────
+(function() {
+  var el = document.getElementById('next-update-countdown');
+  if (!el) return;
+  // GitHub Actions は毎時 :30 UTC にビルドが走るので次の :30 UTC を計算
+  function nextBuildTime() {
+    var now = new Date();
+    var next = new Date(now);
+    next.setUTCSeconds(0);
+    next.setUTCMilliseconds(0);
+    next.setUTCMinutes(30);
+    if (next <= now) {
+      // 今時間の :30 は過ぎているので次の時間へ
+      next.setUTCHours(next.getUTCHours() + 1);
+    }
+    return next;
+  }
+  function tick() {
+    var diff = Math.max(0, Math.floor((nextBuildTime() - new Date()) / 1000));
+    var m = Math.floor(diff / 60);
+    var s = diff % 60;
+    el.textContent = '次回更新まで ' + m + '分' + (s < 10 ? '0' : '') + s + '秒';
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
 </script>
 </body>
