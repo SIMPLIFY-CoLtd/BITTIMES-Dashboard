@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="refresh" content="3600">
-<meta name="build-time" content="2026-05-31 19:47 JST">
+<meta name="build-time" content="2026-05-31 20:14 JST">
 <title>BITTIMES Master Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1530,7 +1530,7 @@
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div class="header-meta">
           <div>監査レポート <span class="audit-chip">2026-W22</span></div>
-          <div>更新: 2026-05-31 19:47 JST</div>
+          <div>更新: 2026-05-31 20:14 JST</div>
         </div>
         <button class="btn-settings" id="btn-settings" onclick="openTokenModal()" title="GitHub Token を設定">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -1785,6 +1785,7 @@
 <div class="kpi-section"><div class="kpi-header">📊 KPI達成状況 <span class="kpi-deadline">目標: 2027-05</span></div><div class="kpi-cards"><div class="kpi-card"><div class="kpi-label">🎯 月間PV</div><div class="kpi-value" style="color:#4f9cf9">73,870<span class="kpi-unit">/月</span></div><div class="kpi-goal-text">目標 <b>500,000</b> 今月目標比 <span style='color:#10d98a;font-weight:700'>+6,770</span></div><div class="kpi-gauge-wrap"><div class="kpi-gauge-track"><div class="kpi-gauge-fill" style="width:14.8%;background:#4f9cf9"></div></div><span class="kpi-gauge-pct">14.8%</span></div><div class="kpi-ms-text">今月MS: 67,100 / ペース: 100%達成</div></div><div class="kpi-card"><div class="kpi-label">🎯 月間セッション</div><div class="kpi-value" style="color:#10d98a">55,762<span class="kpi-unit">/月</span></div><div class="kpi-goal-text">目標 <b>300,000</b> 今月目標比 <span style='color:#10d98a;font-weight:700'>+4,662</span></div><div class="kpi-gauge-wrap"><div class="kpi-gauge-track"><div class="kpi-gauge-fill" style="width:18.6%;background:#10d98a"></div></div><span class="kpi-gauge-pct">18.6%</span></div><div class="kpi-ms-text">今月MS: 51,100 / ペース: 100%達成</div></div></div><div class="kpi-discover-alert" style="border-color:#f59e0b22;background:#f59e0b0d"><span style="color:#f59e0b;font-weight:700">⚠️ Discover依存度: 78.7%</span><span class="kpi-disc-sub"> 目標50%以下 — 要監視</span></div></div>  <div class="tab-bar">
     <button class="tab-btn" data-tab="seo" onclick="switchTab('seo')">🔍 SEO スナップショット</button>
     <button class="tab-btn" data-tab="ai" onclick="switchTab('ai')">🤖 AI Search</button>
+    <button class="tab-btn" data-tab="notion" onclick="switchTab('notion')">📊 Notionボード</button>
   </div>
 
   <div id="tab-seo" style="display:none">
@@ -1814,8 +1815,35 @@
 </div>
   </div>
 
+  <div id="tab-notion" style="display:none">
+<div class="nb-panel" style="background:var(--card,#1a1d24);border-radius:12px;padding:20px;">
+  <style>
+    .nb-chip{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-size:13px;margin:2px 0}
+    .nb-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+    @media(max-width:640px){.nb-grid{grid-template-columns:1fr}}
+    .nb-box{background:rgba(255,255,255,.03);border-radius:10px;padding:12px 14px}
+    .nb-box h4{margin:0 0 8px;font-size:14px;opacity:.85}
+    .nb-list{margin:0;padding-left:18px;font-size:13px;line-height:1.7}
+    .nb-meta{opacity:.6;font-size:12px}
+    .nb-overdue{color:#ff6b6b;font-size:12px;font-weight:600}
+    .nb-empty{opacity:.5;font-size:13px}
+  </style>
+  <div class="nb-panel-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <span style="font-size:16px;font-weight:700">📊 Notion SEOボード（全120枚）</span>
+    <span class="nb-meta">2026-05-31T11:09:15Z 時点</span>
+  </div>
+  <div style="margin-top:10px"><span class="nb-chip">✅ 実行済み <b>91</b></span> &nbsp; <span class="nb-chip">📋 タスク <b>25</b></span> &nbsp; <span class="nb-chip">🔒 保留 <b>4</b></span></div>
+  <div class="nb-grid">
+    <div class="nb-box"><h4>⚠️ 期限超過の📋タスク（3）</h4><ul class="nb-list"><li>【Discover】単一記事依存度82%超 — Discover複数化を緊急実施 <span class="nb-overdue">期限 2026-05-25</span></li><li>【B_CTR】タイトル・メタ最適化 3件（クラリティ法案・XRP・MSTR株価） <span class="nb-overdue">期限 2026-05-25</span></li><li>【Discover】週次まとめ記事の定期公開フォーマット設計 <span class="nb-overdue">期限 2026-05-17</span></li></ul></div>
+    <div class="nb-box"><h4>🔒 保留（4）</h4><ul class="nb-list"><li>【テスト】ステーキングの仕組みと主要銘柄の利回り比較2026年版 <span class="nb-meta">[🟡 中/新規特集記事]</span></li><li>【テスト】ステーブルコインとは？種類・仕組み・リスクを初心者向けに解説 <span class="nb-meta">[/新規特集記事]</span></li><li>【SEO】press-release 全ページ noindex化 <span class="nb-meta">[🟢 低/SEO流入]</span></li><li>【Discover】記事冒頭要約の直帰率影響を検証・廃止判断 <span class="nb-meta">[🔴 高/Discover対策]</span></li></ul></div>
+    <div class="nb-box"><h4>⚠️ pid重複（17）</h4><ul class="nb-list"><li>pid=100906 <span class="nb-meta">2枚重複</span></li><li>pid=121691 <span class="nb-meta">3枚重複</span></li><li>pid=156187 <span class="nb-meta">3枚重複</span></li><li>pid=159049 <span class="nb-meta">2枚重複</span></li><li>pid=209443 <span class="nb-meta">2枚重複</span></li><li>pid=217132 <span class="nb-meta">2枚重複</span></li><li>pid=217687 <span class="nb-meta">4枚重複</span></li><li>pid=218226 <span class="nb-meta">2枚重複</span></li><li>pid=218988 <span class="nb-meta">2枚重複</span></li><li>pid=219394 <span class="nb-meta">3枚重複</span></li><li>pid=220123 <span class="nb-meta">2枚重複</span></li><li>pid=220484 <span class="nb-meta">2枚重複</span></li><li>pid=221055 <span class="nb-meta">2枚重複</span></li><li>pid=221361 <span class="nb-meta">3枚重複</span></li><li>pid=76146 <span class="nb-meta">2枚重複</span></li><li>pid=94493 <span class="nb-meta">4枚重複</span></li><li>pid=96857 <span class="nb-meta">3枚重複</span></li></ul></div>
+    <div class="nb-box"><h4>ℹ️ 注</h4><div class="nb-empty">このボードはSEO実行管理。SNS/タブレットバナー等の保留は pending.json（横断キュー）側で別管理。</div></div>
+  </div>
+</div>
+  </div>
+
   <footer class="footer">
-    <div class="live-indicator"><span class="live-dot"></span>最終更新: 2026-05-31 19:47 JST &nbsp;·&nbsp; <span id="next-update-countdown">次回更新を計算中…</span></div>
+    <div class="live-indicator"><span class="live-dot"></span>最終更新: 2026-05-31 20:14 JST &nbsp;·&nbsp; <span id="next-update-countdown">次回更新を計算中…</span></div>
     <div>
       <a href="https://github.com/SIMPLIFY-CoLtd/BITTIMES-Master" target="_blank" rel="noopener">BITTIMES-Master</a>
       &nbsp;·&nbsp;
